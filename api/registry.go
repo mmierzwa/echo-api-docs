@@ -46,8 +46,9 @@ func (r *Registry) Operations() []Operation {
 			if route.Name == op.handlerName {
 				r.operations[i].path = route.Path
 				r.operations[i].method = route.Method
-				r.operations[i].id = fmt.Sprintf("%s-%s", strings.ToLower(route.Method), strings.ReplaceAll(strings.Trim(route.Path, "/"), "/", "-"))
-				break
+				if r.operations[i].id == "" {
+					r.operations[i].id = fmt.Sprintf("%s-%s", strings.ToLower(route.Method), strings.ReplaceAll(strings.Trim(route.Path, "/"), "/", "-"))
+				}
 			}
 		}
 	}
