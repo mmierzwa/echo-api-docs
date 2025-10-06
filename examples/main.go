@@ -21,13 +21,13 @@ func main() {
 	registry := api.NewRegistry(e)
 
 	// test routes
-	e.GET("/", registry.Register(echo.HandlerFunc(NewHelloFromRootHandler()),
+	e.GET("/", registry.R(echo.HandlerFunc(NewHelloFromRootHandler()),
 		api.WithID("helloFromRoot"),
 		api.WithDescription("A simple hello world endpoint at the root path"),
 		api.WithTags("example", "hello"),
 		api.WithResponse[helloFromRootResponse](http.StatusOK, "application/json", "Successful response"),
 	))
-	e.POST("/the-great-post", registry.Register(echo.HandlerFunc(NewHelloFromTheGreatPostHandler()),
+	e.POST("/the-great-post", registry.R(echo.HandlerFunc(NewHelloFromTheGreatPostHandler()),
 		api.WithDescription("A great POST endpoint that greets you"),
 		api.WithTags("example"),
 		api.WithRequest[helloFromTheGreatPostRequest]("application/json"),

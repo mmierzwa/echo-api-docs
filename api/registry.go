@@ -21,6 +21,7 @@ func NewRegistry(e *echo.Echo) *Registry {
 	}
 }
 
+// Register registers an Echo handler function along with its metadata.
 func (r *Registry) Register(handlerFunc echo.HandlerFunc, opts ...OperationOption) echo.HandlerFunc {
 	pc := reflect.ValueOf(handlerFunc).Pointer()
 	handlerName := runtime.FuncForPC(pc).Name()
@@ -37,6 +38,11 @@ func (r *Registry) Register(handlerFunc echo.HandlerFunc, opts ...OperationOptio
 	r.operations = append(r.operations, op)
 
 	return handlerFunc
+}
+
+// R is a shorthand alias for Register.
+func (r *Registry) R(handlerFunc echo.HandlerFunc, opts ...OperationOption) echo.HandlerFunc {
+	return r.Register(handlerFunc, opts...)
 }
 
 func (r *Registry) Operations() []Operation {
