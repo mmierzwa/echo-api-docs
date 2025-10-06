@@ -1,4 +1,4 @@
-module echo-api-docs
+module github.com/mmierzwa/echo-api-docs
 
 go 1.25
 
