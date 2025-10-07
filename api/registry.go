@@ -130,18 +130,8 @@ func WithTags(tags ...string) OperationOption {
 	}
 }
 
-func WithResponse[T any](statusCode int, description string, contentType string) OperationOption {
-	return func(o *Operation) {
-		var t T
-		if o.responses == nil {
-			o.responses = make(map[int]Response)
-		}
-		o.responses[statusCode] = Response{
-			bodyType:    reflect.TypeOf(t),
-			description: description,
-			contentType: contentType,
-		}
-	}
+type Request struct {
+	bodyType reflect.Type
 }
 
 func WithRequest[T any](contentType string) OperationOption {
@@ -156,6 +146,24 @@ func WithRequest[T any](contentType string) OperationOption {
 	}
 }
 
+func (r Request) String() string {
+	return r.bodyType.String()
+}
+
+func WithResponse[T any](statusCode int, description string, contentType string) OperationOption {
+	return func(o *Operation) {
+		var t T
+		if o.responses == nil {
+			o.responses = make(map[int]Response)
+		}
+		o.responses[statusCode] = Response{
+			bodyType:    reflect.TypeOf(t),
+			description: description,
+			contentType: contentType,
+		}
+	}
+}
+
 type Response struct {
 	bodyType    reflect.Type
 	description string
@@ -164,12 +172,4 @@ type Response struct {
 
 func (r Response) String() string {
 	return fmt.Sprintf("%s (%s): %s", r.bodyType.String(), r.contentType, r.description)
-}
-
-type Request struct {
-	bodyType reflect.Type
-}
-
-func (r Request) String() string {
-	return r.bodyType.String()
 }
